@@ -54,7 +54,3 @@ logo_7000.svg
 ```bash
 pip install tkinterdnd2
 python gui_universal.py
-
-## Author
-
-Egor
