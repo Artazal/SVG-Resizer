@@ -1,22 +1,22 @@
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-def enlarge_svg(input_file: str, target_width: int = 7000) -> str:
+def resize_svg(input_file: str, target_width: int = 7000) -> str:
     tree = ET.parse(input_file)
     root = tree.getroot()
 
     viewbox = root.get("viewBox")
     if not viewbox:
-        raise ValueError("The .SVG doesn't have viewBox. Proportions cannot be calculated safely.")
+        raise ValueError("The file doesn't have required size data. Proportions cannot be calculated safely.")
 
     parts = viewbox.replace(",", " ").split()
     if len(parts) != 4:
-        raise ValueError(f"Strange viewBox format: {viewbox}")
+        raise ValueError(f"The file has incorrect format: {viewbox}")
 
     min_x, min_y, vb_width, vb_height = map(float, parts)
 
     if vb_width == 0:
-        raise ValueError("The width of viewBox = 0")
+        raise ValueError("The width = 0")
     aspect_ratio = vb_height / vb_width
     target_height = round(target_width * aspect_ratio)
 
@@ -29,11 +29,11 @@ def enlarge_svg(input_file: str, target_width: int = 7000) -> str:
 
     return str(output_file)
 
-def enlarge_multiple_svgs(file_paths: list[str], target_width: int = 7000):
+def resize_multiple_svgs(file_paths: list[str], target_width: int = 7000):
     results = []
     for file_path in file_paths:
         try:
-            output = enlarge_svg(file_path, target_width)
+            output = resize_svg(file_path, target_width)
             results.append((file_path, "OK", output))
         except Exception as e:
             results.append((file_path, "ERROR", str(e)))
