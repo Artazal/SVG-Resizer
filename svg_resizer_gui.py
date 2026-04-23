@@ -1,4 +1,4 @@
-from svg_service_universal import enlarge_multiple_svgs
+from svg_resizer_service import resize_multiple_svgs
 from tkinter import filedialog, Label, Button, StringVar, Listbox, END, Frame, Entry, messagebox
 from pathlib import Path
 from tkinterdnd2 import DND_FILES, TkinterDnD
@@ -8,7 +8,6 @@ file_paths = []
 
 def browse_files():
     global file_paths
-    global message
     file_paths = filedialog.askopenfilenames(
         title="Select .SVG files",
         filetypes=[("SVG files", "*.svg")]
@@ -86,7 +85,7 @@ def clear_selection():
     file_list.delete(0, END)
     message.set("Selection cleared")
 
-def enlarge_selected_files():
+def resize_selected_files():
     if not file_paths:
         message.set("Please select at least one .SVG file")
         return
@@ -106,7 +105,7 @@ def enlarge_selected_files():
         return
 
     try:
-        results = enlarge_multiple_svgs(file_paths, target_width)
+        results = resize_multiple_svgs(file_paths, target_width)
     except Exception as e:
         message.set("Error occurred")
         print("ERROR:", e)
@@ -185,7 +184,7 @@ b1 = Button(middle_frame, text = "Add SVG files", width = 10, command = browse_f
 b1.pack(side = 'left', padx = 10, pady = 10)
 b3 = Button(middle_frame, text = "Clear selection", width = 10, command = clear_selection)
 b3.pack(side = 'left', padx = 10, pady = 10)
-b2 = Button(middle_frame, text = "Resize", width = 10, command = enlarge_selected_files)
+b2 = Button(middle_frame, text = "Resize", width = 10, command = resize_selected_files)
 b2.pack(side = 'right', padx = 10, pady = 10)
 file_list = Listbox(bottom_frame, width=80, height=10)
 file_list.pack()
